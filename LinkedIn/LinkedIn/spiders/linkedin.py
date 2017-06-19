@@ -52,7 +52,7 @@ class LinkedinSpider(scrapy.Spider):
 
 	def parse(self, response):
 		for key_word in KEY_WORDS:
-			url = self.start_url + key_word + self.end_url + '1'
+			url = self.start_url + key_word #+ self.end_url + '1'
 			#yield scrapy.FormRequest(url, cookies=self.cookies, callback=self.parse_page, meta={'key_word' : key_word})
 			yield scrapy.Request(url, cookies=self.cookies, callback=self.parse_page, meta={'key_word' : key_word})
 
