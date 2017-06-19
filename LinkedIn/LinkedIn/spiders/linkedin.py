@@ -21,17 +21,23 @@ WHITE_LIST = [
         '千里-马-12b5b9129',
         ]
 
+KEY_WORDS = [
+		'小米',
+		'阿里巴巴',
+	]
+
 
 class LinkedinSpider(scrapy.Spider):
-    name = "linkedin"
-    allowed_domains = ["linkedin.com"]
-    start_urls = (
-        'http://www.linkedin.com/feed/',
-    )
-    bash_url = 'http://www.linkedin.com/'
-    
-    start_url = 'http://www.linkedin.com/search/results/index/?keywords=小米&page='
-    cookies = {
+	name = "linkedin"
+	allowed_domains = ["linkedin.com"]
+	start_urls = (
+		'http://www.linkedin.com/feed/',
+	)
+	bash_url = 'http://www.linkedin.com/'
+	person_url = 'http://www.linkedin.com/in/'
+	start_url = 'http://www.linkedin.com/search/results/people/?keywords='
+	end_url = '&page='
+	cookies = {
         'JSESSIONID' : '"ajax:0183095991136748236"',
         '_lipt' : 'CwEAAAFcs_B_PfbmSHBt-HoQu1SiodBIvkTk_z77oP8kRnR5OOBbpyg1Adzpwz56kXyTk9chTmoJ3aJ2lQp6IxhAxym5vflHXB3k60ss7l7UKHEZyIVE06TRHLwtjfSd1g_42eLA8pCU25idM-1jRvuQYSHrwHucz2vPfgjaUJQc-jG5sSowSnPreUqcDfWCp3TKWWehgw',
         'bcookie' : '"v=2&44209652-16bd-4c25-80d9-f09440b5658a"',
@@ -44,21 +50,28 @@ class LinkedinSpider(scrapy.Spider):
         'wwepo' : 'true',
             }
 
-    def parse(self, response):
-        for i in range(1, 6):
-            url = self.start_url + str(i)
-            yield scrapy.FormRequest(url, cookies=self.cookies, callback=self.parse_page)
+	def parse(self, response):
+		for key_word in KEY_WORDS:
+			url = self.start_url + key_word + self.end_url + '1'
+			#yield scrapy.FormRequest(url, cookies=self.cookies, callback=self.parse_page, meta={'key_word' : key_word})
+			yield scrapy.Request(url, cookies=self.cookies, callback=self.parse_page, meta={'key_word' : key_word})
 
-    def parse_page(self, response):
-        pattern = re.compile('.*?&quot;publicIdentifier&quot;:&quot;(.*?)&quot;.*?', re.S)
-        items = re.findall(pattern, response.body)
-        url_list = []
-        print ('==========================================================')
-        for item in items:
-            if item not in WHITE_LIST: 
-                url_list.append(self.bash_url + 'in/' +  item)
-        print(url_list)
-        print ('==========================================================')
+	def parse_page(self, response):
+		for i in range(1, 4):
+			url = self.start_url + response.meta['key_word'] + self.end_url + str(i)
+			#yield scrapy.FormRequest(url, cookies=self.cookies, callback=self.parse_person_url)
+			yield scrapy.Request(url, cookies=self.cookies, callback=self.parse_person_url)
+
+	def parse_person_url(self, response):
+		pattern = re.compile('.*?&quot;publicIdentifier&quot;:&quot;(.*?)&quot;.*?', re.S)
+		items = re.findall(pattern, response.body)
+		url_list = []
+		print ('==========================================================')
+		for item in items:
+			if item not in WHITE_LIST: 
+				url_list.append(self.person_url +  item)
+		print(url_list)
+		print ('==========================================================')
         
         
         #with open('result.html', 'w') as filename:
