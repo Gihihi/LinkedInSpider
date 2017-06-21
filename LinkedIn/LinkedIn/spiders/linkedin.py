@@ -23,7 +23,22 @@ WHITE_LIST = [
 
 KEY_WORDS = [
 		'小米',
-		#'阿里巴巴',
+		'''
+		'阿里巴巴',
+		'腾讯',
+		'百度',
+		'新浪',
+		'搜狗',
+		'360',
+		'猎豹',
+		'美团',
+		'知乎',
+		'猎聘',
+		'拉钩',
+		'豌豆荚',
+		'YY',
+		'网易',
+		'''
 	]
 
 
@@ -82,12 +97,9 @@ class LinkedinSpider(scrapy.Spider):
 			解析LinkedIn个人主页
 		'''
 		content = response.body.replace('&quot;', '"')
-		#print ('====================================')
-		#print (response.url)
-		#print ('====================================')
-		profile_txt = re.findall('', content)
-		firstname = re.findall('"firstname":"(.*?)"', profile_txt)
-		lastname = re.findall('"lastname":"(.*?)"', profile_txt)
+		profile_txt = ' '.join(re.findall('\{[^\{]*?profile\.Profile"[^\}]*?\}', content))
+		firstName = re.findall('"firstName":"(.*?)"', profile_txt)
+		lastName = re.findall('"lastName":"(.*?)"', profile_txt)
 
-		if firstname and lastname:
-			print '姓名: %s%s LinkedIn: %s' %(lastname[0], firstname[0], response.url)
+		if firstName and lastName:
+			print '姓名: %s%s LinkedIn: %s' %(lastName[0], firstName[0], response.url)
