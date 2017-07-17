@@ -7,8 +7,17 @@
 
 import scrapy
 
-
-class LinkedinItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class BaseItem(scrapy.Item):
+	
+	#基本信息
+	id = scrapy.Field()
+	cname = scrapy.Field()
+	url = scrapy.Field()
+	maidenname = scrapy.Field()
+	fullname = scrapy.Field()
+	summary = scrapy.Field()
+	locationname = scrapy.Field()
+	industryname = scrapy.Field()
+	headline = scrapy.Field()
+	skills = scrapy.Field()
+	languages = scrapy.Field()

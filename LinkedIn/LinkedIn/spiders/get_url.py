@@ -3,7 +3,6 @@ import scrapy
 import re
 from keyword import KEY_WORDS
 from cookie import cookie
-from whitelist import WHITE_LIST
 
 class GetUrlSpider(scrapy.Spider):
 	name = 'get_url'
