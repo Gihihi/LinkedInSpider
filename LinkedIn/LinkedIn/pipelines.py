@@ -6,7 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from sql import Sql
 from twisted.internet.threads import deferToThread
-from items import BaseItem
+from items import BaseItem, EduItem, WorkItem
 
 class LinkedinPipeline(object):
     
@@ -23,5 +23,33 @@ class LinkedinPipeline(object):
 			headline = item['headline']
 			skills = item['skills']
 			languages = item['languages']
-			Sql.insert_baseitem(id, cname, url, maidenname, fullname, summary, locationname, industryname, headline, skills, languages)
-
+			try:
+				Sql.insert_baseitem(id, cname, url, maidenname, fullname, summary, locationname, industryname, headline, skills, languages)
+			except:
+				pass
+		if isinstance(item, EduItem):
+			id = item['id']
+			school = item['school']
+			grade = item['grade']
+			degree = item['degree']
+			description = item['description']
+			activities = item['activities']
+			fieldofstudy = item['fieldofstudy']
+			start_date = item['start_date']
+			end_date = item['end_date']
+			try:
+				Sql.insert_eduitem(id, school, grade, degree, description, activities, fieldofstudy, start_date, end_date)
+			except:
+				pass
+		if isinstance(item, WorkItem):
+			id = item['id'] 
+			company = item['company']
+			title = item['title']
+			location = item['location']
+			description = item['description']
+			start_date = item['start_date']
+			end_date = item['end_date']
+			try:
+				Sql.insert_workitem(id, company, title, location, description, start_date, end_date)
+			except:
+				pass

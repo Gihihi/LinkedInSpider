@@ -33,3 +33,95 @@ class Sql:
 			}
 		cur.execute(sql, value)
 		cnx.commit()
+	
+	@classmethod
+	def insert_eduitem(self, id, school, grade, degree, description, activities, fieldofstudy, start_date, end_date):
+		sql = 'INSERT INTO eduitem (ID, SCHOOL, GRADE, DEGREE, DESCRIPTION, ACTIVITIES, FIELDOFSTUDY, START_DATE, END_DATE) VALUES (%(id)s, %(school)s , %(grade)s, %(degree)s, %(description)s, %(activities)s, %(fieldofstudy)s, %(start_date)s, %(end_date)s )'
+		value = {
+			'id' : id,
+			'school' : school,
+			'grade' : grade,
+			'degree' : degree,
+			'description' : description,
+			'activities' : activities,
+			'fieldofstudy' : fieldofstudy,
+			'start_date' : start_date,
+			'end_date'  : end_date,
+			}
+		cur.execute(sql, value)
+		cnx.commit()
+
+	@classmethod
+	def insert_workitem(self, id, company, title, location, description, start_date, end_date):
+		sql = 'INSERT INTO workitem (ID, COMPANY, TITLE, LOCATION, DESCRIPTION, START_DATE, END_DATE) VALUES (%(id)s, %(company)s, %(title)s, %(location)s, %(description)s, %(start_date)s, %(end_date)s )'
+		value = {
+			'id' : id,
+			'company' : company,
+			'title' : title,
+			'location' : location,
+			'description' : description,
+			'start_date' : start_date,
+			'end_date' : end_date,
+			}
+		cur.execute(sql, value)
+		cnx.commit()
+
+	@classmethod
+	def insert_(self, id, ):
+		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+		value = {
+			'id' : id,
+			
+			}
+		cur.execute(sql, value)
+		cnx.commit()
+
+	@classmethod
+	def insert_(self, id, ):
+		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+		value = {
+			'id' : id,
+			
+			}
+		cur.execute(sql, value)
+		cnx.commit()
+
+	@classmethod
+	def insert_(self, id, ):
+		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+		value = {
+			'id' : id,
+			
+			}
+		cur.execute(sql, value)
+		cnx.commit()
+
+	@classmethod
+	def insert_(self, id, ):
+		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+		value = {
+			'id' : id,
+			
+			}
+		cur.execute(sql, value)
+		cnx.commit()
+
+	@classmethod
+	def insert_(self, id, ):
+		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+		value = {
+			'id' : id,
+			
+			}
+		cur.execute(sql, value)
+		cnx.commit()
+
+	@classmethod
+	def insert_(self, id, ):
+		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+		value = {
+			'id' : id,
+			
+			}
+		cur.execute(sql, value)
+		cnx.commit()

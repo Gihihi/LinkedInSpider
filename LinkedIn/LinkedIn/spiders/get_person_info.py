@@ -4,7 +4,7 @@ import MySQLdb
 import random
 import re
 import json
-from LinkedIn.items import BaseItem
+from LinkedIn.items import BaseItem, EduItem, WorkItem
 from cookie import cookie
 from LinkedIn.settings import MYSQL_CONFIG
 
@@ -77,3 +77,47 @@ class GetPersonInfoSpider(scrapy.Spider):
 			Skills.append(Skill_info['name'])
 		item['skills'] = ','.join(Skills)
 		yield item
+
+		#教育经历
+		Education_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.Education"[^\}]*?\}', content)
+		for Education in Education_list:
+			item = EduItem()
+			Education_info = json.loads(Education)
+			item['id'] = id
+			item['activities'] = Education_info.get('activities','')
+			item['description'] = Education_info.get('description','')
+			item['school'] = Education_info.get('schoolName','')
+			item['grade'] = Education_info.get('grade','')
+			item['degree'] = Education_info.get('degreeName','')
+			item['fieldofstudy'] = Education_info.get('fieldOfStudy','')
+			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Education_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+			item['start_date'] = start_date.replace('-/', '')
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Education_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
+				item['end_date'] = end_date.replace('-/', '')
+			except:
+				item['end_date'] = '至今'
+			yield item
+
+		#工作经历
+		Position_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.Position"[^\}]*?\}', content)
+		for Position in Position_list:
+			item = WorkItem()
+			Position_info = json.loads(Position)
+			item['id'] = id
+			item['description'] = Position_info.get('description','')
+			item['company'] = Position_info.get('companyName','')
+			item['title'] = Position_info.get('title','')
+			item['location'] = Position_info.get('locationName','')
+			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Position_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+			item['start_date'] = start_date.replace('-/', '')
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Position_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
+				item['end_date'] = end_date.replace('-/', '')
+			except:
+				item['end_date'] = '至今'
+			yield item
