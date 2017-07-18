@@ -4,7 +4,7 @@ import MySQLdb
 import random
 import re
 import json
-from LinkedIn.items import BaseItem, EduItem, WorkItem
+from LinkedIn.items import BaseItem, EduItem, WorkItem, HonorItem, OrgItem
 from cookie import cookie
 from LinkedIn.settings import MYSQL_CONFIG
 
@@ -116,6 +116,42 @@ class GetPersonInfoSpider(scrapy.Spider):
 			item['start_date'] = start_date.replace('-/', '')
 			try:
 				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Position_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
+				item['end_date'] = end_date.replace('-/', '')
+			except:
+				item['end_date'] = '至今'
+			yield item
+
+		#荣誉奖项
+		Honor_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.Honor"[^\}]*?\}', content)
+		for Honor in Honor_list:
+			item = HonorItem()
+			Honor_info = json.loads(Honor)
+			item['id'] = id
+			item['issuer'] = Honor_info.get('issuer', '')
+			item['title'] = Honor_info.get('title', '')
+			item['description'] = Honor_info.get('description', '')
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s"[^\}]*?\}' % Honor_info.get('issueDate','').replace('(', '\(').replace(')', '\)'), content)[0])
+				start_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
+			yield item
+
+		#参与组织
+		Organization_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.Organization"[^\}]*?\}', content)
+		for Organization in Organization_list:
+			item = OrgItem()
+			Organization_info = json.loads(Organization)
+			item['id'] = id
+			item['name'] = Organization_info.get('name', '')
+			item['position'] = Organization_info.get('position', '')
+			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Organization_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+			item['start_date'] = start_date.replace('-/', '')
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Organization_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
 				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
 				item['end_date'] = end_date.replace('-/', '')
 			except:

@@ -46,7 +46,6 @@ class WorkItem(scrapy.Item):
 	start_date = scrapy.Field()
 	end_date = scrapy.Field()
 
-'''
 class HonorItem(scrapy.Item):
 
 	#荣誉奖项
@@ -65,6 +64,7 @@ class OrgItem(scrapy.Item):
 	start_date = scrapy.Field()
 	end_date = scrapy.Field()
 
+'''
 class ProItem(scrapy.item):
 	
 	#项目经历

@@ -67,21 +67,27 @@ class Sql:
 		cnx.commit()
 
 	@classmethod
-	def insert_(self, id, ):
-		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+	def insert_honoritem(self, id, issuer, title, description, start_date):
+		sql = 'INSERT INTO honoritem (ID, ISSUER, TITLE, DESCRIPTION, START_DATE) VALUES (%(id)s, %(issuer)s, %(title)s, %(description)s, %(start_date)s )'
 		value = {
 			'id' : id,
-			
+			'issuer,' : issuer,
+			'title,' : title,
+			'description,' : description,
+			'start_date' : start_date,
 			}
 		cur.execute(sql, value)
 		cnx.commit()
 
 	@classmethod
-	def insert_(self, id, ):
-		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+	def insert_orgitem(self, id, name, position, start_date, end_date):
+		sql = 'INSERT INTO orgitem (ID, NAME, POSITION, START_DATE, END_DATE) VALUES (%(id)s, %(name)s, %(position)s , %(start_date)s , %(end_date)s )'
 		value = {
 			'id' : id,
-			
+			'name' : name,
+			'position' : position,
+			'start_date' : start_date,
+			'end_date' : end_date,
 			}
 		cur.execute(sql, value)
 		cnx.commit()
