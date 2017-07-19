@@ -6,7 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from sql import Sql
 from twisted.internet.threads import deferToThread
-from items import BaseItem, EduItem, WorkItem, HonorItem, OrgItem
+from items import BaseItem, EduItem, WorkItem, HonorItem, OrgItem, ProItem, PubItem, TestItem, CertItem
 
 class LinkedinPipeline(object):
     
@@ -71,5 +71,48 @@ class LinkedinPipeline(object):
 			end_date = item['end_date']
 			try:
 				Sql.insert_orgitem(id, name, position, start_date, end_date)
+			except:
+				pass
+		if isinstance(item, ProItem):
+			id = item['id']
+			title = item['title']
+			description = item['description']
+			url = item['url']
+			start_date = item['start_date']
+			end_date = item['end_date']
+			try:
+				Sql.insert_proitem(id, title, description, url, start_date, end_date)
+			except:
+				pass
+		if isinstance(item, PubItem):
+			id = item['id']
+			publisher = item['publisher']
+			description = item['description']
+			url = item['url']
+			name = item['name']
+			start_date = item['start_date']
+			try:
+				Sql.insert_pubitem(id, publisher, description, url, name, start_date)
+			except:
+				pass
+		if isinstance(item, TestItem):
+			id = item['id']
+			name = item['name']
+			description = item['description']
+			score = item['score']
+			start_date = item['start_date']
+			try:
+				Sql.insert_testitem(id, name, description, score, start_date)
+			except:
+				pass
+		if isinstance(item, CertItem):
+			id = item['id']
+			name = item['name']
+			authority = item['authority']
+			licensenumber = item['licensenumber']
+			start_date = item['start_date']
+			end_date = item['end_date']
+			try:
+				Sql.insert_certitem(id, name, authority, licensenumber, start_date, end_date)
 			except:
 				pass

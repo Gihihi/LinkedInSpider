@@ -64,8 +64,7 @@ class OrgItem(scrapy.Item):
 	start_date = scrapy.Field()
 	end_date = scrapy.Field()
 
-'''
-class ProItem(scrapy.item):
+class ProItem(scrapy.Item):
 	
 	#项目经历
 	id = scrapy.Field()
@@ -103,4 +102,3 @@ class CertItem(scrapy.Item):
 	licensenumber = scrapy.Field()
 	start_date = scrapy.Field()
 	end_date = scrapy.Field()
-'''

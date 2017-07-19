@@ -4,7 +4,7 @@ import MySQLdb
 import random
 import re
 import json
-from LinkedIn.items import BaseItem, EduItem, WorkItem, HonorItem, OrgItem
+from LinkedIn.items import BaseItem, EduItem, WorkItem, HonorItem, OrgItem, ProItem, PubItem, TestItem, CertItem
 from cookie import cookie
 from LinkedIn.settings import MYSQL_CONFIG
 
@@ -43,7 +43,7 @@ class GetPersonInfoSpider(scrapy.Spider):
 			yield scrapy.Request(url, cookies=COOKIES, callback=self.parse, meta={'id' : row[0], 'cname' : row[1]})
 
 	def parse(self, response):
-		content = response.body.replace('&quot;', '"')
+		content = response.body.replace('&quot;', '"').replace('&#92;', '\\')
 		
 		id = response.meta['id']
 		cname = response.meta['cname']
@@ -152,6 +152,84 @@ class GetPersonInfoSpider(scrapy.Spider):
 			item['start_date'] = start_date.replace('-/', '')
 			try:
 				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Organization_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
+				item['end_date'] = end_date.replace('-/', '')
+			except:
+				item['end_date'] = '至今'
+			yield item
+
+		#项目经历
+		Project_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.Project"[^\}]*?\}', content)
+		for Project in Project_list:
+			item = ProItem()
+			Project_info = json.loads(Project)
+			item['id'] = id
+			item['description'] = Project_info.get('description', '')
+			item['title'] = Project_info.get('title', '')
+			item['url'] = Project_info.get('url', '')
+			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Project_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+			item['start_date'] = start_date.replace('-/', '')
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Project_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
+				item['end_date'] = end_date.replace('-/', '')
+			except:
+				item['end_date'] = '至今'
+			yield item
+
+		#出版作品
+		Publication_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.Publication"[^\}]*?\}', content)
+		for Publication in Publication_list:
+			item = PubItem()
+			Publication_info = json.loads(Publication)
+			item['id'] = id
+			item['publisher'] = Publication_info.get('publisher', '')
+			item['description'] = Publication_info.get('description', '')
+			item['url'] = Publication_info.get('url', '')
+			item['name'] = Publication_info.get('name', '')
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s"[^\}]*?\}' % Publication_info.get('date','').replace('(', '\(').replace(')', '\)'), content)[0])
+				start_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
+			yield item
+
+		#测试成绩
+		TestScore_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.TestScore"[^\}]*?\}', content)
+		for TestScore in TestScore_list:
+			item = TestItem()
+			TestScore_info = json.loads(TestScore)
+			item['id'] = id
+			item['name'] = TestScore_info.get('name','')
+			item['description'] = TestScore_info.get('description','')
+			item['score'] = TestScore_info.get('score','')
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s"[^\}]*?\}' % TestScore_info.get('date', '').replace('(', '\(').replace(')', '\)'),content)[0])
+				start_date =  str(end_Date_json.get('year', '-')) + '-' + str(end_Date_json.get('month', '/')) + '-' + str(end_Date_json.get('day', '/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
+			yield item
+
+		#资格认证
+		Certification_list = re.findall('\{[^\{]*?"com\.linkedin\.voyager\.identity\.profile\.Certification"[^\}]*?\}', content)
+		for Certification in Certification_list:
+			item = CertItem()
+			Certification_info = json.loads(Certification)
+			item['id'] = id
+			item['name'] = Certification_info.get('name', '')
+			item['authority'] = Certification_info.get('authority', '')
+			item['licensenumber'] = Certification_info.get('licenseNumber', '')
+			try:
+				start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Certification_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
+			try:
+				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Certification_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
 				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
 				item['end_date'] = end_date.replace('-/', '')
 			except:

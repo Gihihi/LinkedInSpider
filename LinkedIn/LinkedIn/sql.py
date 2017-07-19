@@ -71,9 +71,9 @@ class Sql:
 		sql = 'INSERT INTO honoritem (ID, ISSUER, TITLE, DESCRIPTION, START_DATE) VALUES (%(id)s, %(issuer)s, %(title)s, %(description)s, %(start_date)s )'
 		value = {
 			'id' : id,
-			'issuer,' : issuer,
-			'title,' : title,
-			'description,' : description,
+			'issuer' : issuer,
+			'title' : title,
+			'description' : description,
 			'start_date' : start_date,
 			}
 		cur.execute(sql, value)
@@ -93,41 +93,56 @@ class Sql:
 		cnx.commit()
 
 	@classmethod
-	def insert_(self, id, ):
-		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+	def insert_proitem(self, id, title, description, url, start_date, end_date):
+		sql = 'INSERT INTO proitem (ID, TITLE, DESCRIPTION, URL, START_DATE, END_DATE) VALUES (%(id)s, %(title)s, %(description)s, %(url)s, %(start_date)s, %(end_date)s )'
 		value = {
 			'id' : id,
-			
+			'title' : title,
+			'description' : description,
+			'url' : url,
+			'start_date' : start_date,
+			'end_date' : end_date,
 			}
 		cur.execute(sql, value)
 		cnx.commit()
 
 	@classmethod
-	def insert_(self, id, ):
-		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+	def insert_pubitem(self, id, publisher, description, url, name, start_date):
+		sql = 'INSERT INTO pubitem (ID, PUBLISHER, DESCRIPTION, URL, NAME, START_DATE) VALUES (%(id)s, %(publisher)s, %(description)s, %(url)s, %(name)s, %(start_date)s )'
 		value = {
 			'id' : id,
-			
+			'publisher' : publisher,
+			'description' : description,
+			'url' : url,
+			'name' : name,
+			'start_date' : start_date,
 			}
 		cur.execute(sql, value)
 		cnx.commit()
 
 	@classmethod
-	def insert_(self, id, ):
-		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+	def insert_testitem(self, id, name, description, score, start_date):
+		sql = 'INSERT INTO testitem (ID, NAME, DESCRIPTION, SCORE, START_DATE) VALUES (%(id)s, %(name)s, %(description)s, %(score)s, %(start_date)s )'
 		value = {
 			'id' : id,
-			
+			'name' : name,
+			'description' : description,
+			'score' : score,
+			'start_date' : start_date,
 			}
 		cur.execute(sql, value)
 		cnx.commit()
 
 	@classmethod
-	def insert_(self, id, ):
-		sql = 'INSERT INTO  (ID, ) VALUES (%(id)s,  )'
+	def insert_certitem(self, id, name, authority, licensenumber, start_date, end_date):
+		sql = 'INSERT INTO certitem (ID, NAME, AUTHORITY, LICENSENUMBER, START_DATE, END_DATE) VALUES (%(id)s, %(name)s, %(authority)s, %(licensenumber)s, %(start_date)s, %(end_date)s )'
 		value = {
 			'id' : id,
-			
+			'name' : name,
+			'authority' : authority,
+			'licensenumber' : licensenumber,
+			'start_date' : start_date,
+			'end_date' : end_date,
 			}
 		cur.execute(sql, value)
 		cnx.commit()
