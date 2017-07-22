@@ -90,9 +90,12 @@ class GetPersonInfoSpider(scrapy.Spider):
 			item['grade'] = Education_info.get('grade','')
 			item['degree'] = Education_info.get('degreeName','')
 			item['fieldofstudy'] = Education_info.get('fieldOfStudy','')
-			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Education_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
-			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
-			item['start_date'] = start_date.replace('-/', '')
+			try:
+				start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Education_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
 			try:
 				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Education_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
 				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
@@ -111,9 +114,12 @@ class GetPersonInfoSpider(scrapy.Spider):
 			item['company'] = Position_info.get('companyName','')
 			item['title'] = Position_info.get('title','')
 			item['location'] = Position_info.get('locationName','')
-			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Position_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
-			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
-			item['start_date'] = start_date.replace('-/', '')
+			try:
+				start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Position_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
 			try:
 				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Position_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
 				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
@@ -147,9 +153,12 @@ class GetPersonInfoSpider(scrapy.Spider):
 			item['id'] = id
 			item['name'] = Organization_info.get('name', '')
 			item['position'] = Organization_info.get('position', '')
-			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Organization_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
-			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
-			item['start_date'] = start_date.replace('-/', '')
+			try:
+				start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Organization_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
 			try:
 				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Organization_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
 				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))
@@ -167,9 +176,12 @@ class GetPersonInfoSpider(scrapy.Spider):
 			item['description'] = Project_info.get('description', '')
 			item['title'] = Project_info.get('title', '')
 			item['url'] = Project_info.get('url', '')
-			start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Project_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
-			start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
-			item['start_date'] = start_date.replace('-/', '')
+			try:
+				start_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,startDate"[^\}]*?\}' % Project_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
+				start_date = str(start_Date_json.get('year','-')) + '-' + str(start_Date_json.get('month','/')) + '-' + str(start_Date_json.get('day','/'))
+				item['start_date'] = start_date.replace('-/', '')
+			except:
+				item['start_date'] = ''
 			try:
 				end_Date_json = json.loads(re.findall('\{[^\{]*?"\$id":"%s,endDate"[^\}]*?\}' % Project_info.get('timePeriod','').replace('(', '\(').replace(')', '\)'), content)[0])
 				end_date = str(end_Date_json.get('year','-')) + '-' + str(end_Date_json.get('month','/')) + '-' + str(end_Date_json.get('day','/'))

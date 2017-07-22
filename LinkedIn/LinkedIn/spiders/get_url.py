@@ -12,14 +12,14 @@ class GetUrlSpider(scrapy.Spider):
 	start_url = 'https://www.linkedin.com/search/results/people/?facetCurrentCompany=["'
 	end_url = '"]&facetGeoRegion=["cn:0"]&page='
 	
-	home_path ='/home/python/GitHub/LinkedInSpider/url_info/url/'
+	home_path ='/home/python/GitHub/LinkedInSpider/url_info/url3/'
 	
 	def start_requests(self):
 		'''
 			搜索关键字
 		'''
 		for company_id in KEY_WORDS.keys():
-			for page in range(1,3):
+			for page in range(5,6):
 				url = self.start_url + company_id + self.end_url + str(page)
 				yield scrapy.Request(url, cookies=cookie, callback=self.parse, meta={'cid' : company_id, 'page' : str(page)})
 
